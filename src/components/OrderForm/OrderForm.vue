@@ -29,6 +29,17 @@
         label="Quantity:"
         :inputOnChange="inputOnChange"
       >
+        <Coin />
+      </OrderFormInput>
+    </div>
+    <div class="order-form__row">
+      <OrderFormInput
+        label="Price:"
+        v-model:value="price"
+        :increaseOnClick="unitOnIncrease"
+        :decreaseOnClick="unitOnIncrease"
+        class="order-form__final-price"
+      >
         <Dollar />
       </OrderFormInput>
     </div>
@@ -57,6 +68,7 @@ import TButton from "@/components/Shared/TButton";
 import OrderFormInput from "@/components/OrderForm/OrderFormInput";
 import Bitcoin from "@/components/icons/Bitcoin.vue";
 import Dollar from "@/components/icons/Dollar.vue";
+import Coin from "@/components/icons/Coin.vue";
 
 import type { IRadioButtonItem } from "@/models";
 import { ref } from "vue";
@@ -87,6 +99,7 @@ const inputOnChange = (number: number) => console.log("number :: ", number);
 const submitOrderOnClick = () => console.log("submit");
 const btcAmount = ref(0.05);
 const usdtAmount = ref(0.05);
+const price = ref(0);
 const selectedUnit = ref(options[0]);
 </script>
 
