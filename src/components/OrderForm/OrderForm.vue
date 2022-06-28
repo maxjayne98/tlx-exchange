@@ -82,44 +82,97 @@ import Bitcoin from "@/components/icons/Bitcoin.vue";
 import Dollar from "@/components/icons/Dollar.vue";
 import Coin from "@/components/icons/Coin.vue";
 
-import type { IRadioButtonItem } from "@/models";
+import type { IRadioButtonItem, Operation } from "@/models";
 import { ref } from "vue";
-import { PRICE_EPSILON } from "@/utils/configs";
+import { roundUp } from "@/utils/helpers";
+import {
+  BTC_EPSILON,
+  BTC_PRICE,
+  CALCULATION_RESOLUTION,
+  PRICE_EPSILON,
+  USDT_EPSILON,
+} from "@/utils/configs";
 
 const options: IRadioButtonItem[] = [
   { label: "BTC", value: "BTC" },
   { label: "USDT", value: "USDT" },
 ];
 
+const handleBtcOnChange = (operation: Operation) => {
+  const values: Record<Operation, number> = {
+    "+": btcAmount.value + BTC_EPSILON,
+    "-": btcAmount.value - BTC_EPSILON,
+  };
+
+  const value = values[operation];
+  const calcValue = roundUp(
+    (value * CALCULATION_RESOLUTION) / CALCULATION_RESOLUTION
+  );
+  btcAmount.value = calcValue;
+  updateUsdtAmount(calcValue, BTC_PRICE as number);
+};
+
+const handleUsdtOnChange = (operation: Operation) => {
+  const values: Record<Operation, number> = {
+    "+": usdtAmount.value + USDT_EPSILON,
+    "-": usdtAmount.value - USDT_EPSILON,
+  };
+
+  const value = values[operation];
+  const calcValue = roundUp(
+    (value * CALCULATION_RESOLUTION) / CALCULATION_RESOLUTION
+  );
+  usdtAmount.value = calcValue;
+  updateBtcAmount(calcValue, BTC_PRICE as number);
+};
+
 const unitOnIncrease = () => {
   if (selectedUnit.value.value === "BTC") {
-    console.log("btc +++ ");
+    handleBtcOnChange("+");
   } else {
-    console.log("btc --- ");
+    handleUsdtOnChange("+");
   }
 };
 
 const unitOnDecrease = () => {
   if (selectedUnit.value.value === "BTC") {
-    console.log("btc +++ ");
+    handleBtcOnChange("-");
   } else {
-    console.log("btc --- ");
+    handleUsdtOnChange("-");
   }
 };
 
 const priceOnIncrease = () => {
-  price.value = price.value + PRICE_EPSILON;
+  price.value = roundUp(
+    ((price.value + PRICE_EPSILON) * CALCULATION_RESOLUTION) /
+      CALCULATION_RESOLUTION
+  );
 };
 
 const priceOnDecrease = () => {
-  price.value = price.value - PRICE_EPSILON;
+  price.value = roundUp(
+    ((price.value - PRICE_EPSILON) * CALCULATION_RESOLUTION) /
+      CALCULATION_RESOLUTION
+  );
 };
+
+const convertBtcToUsdt = (btc: number, priceInUsdt: number) =>
+  roundUp(btc * priceInUsdt);
+
+const convertUsdtToBtc = (usdt: number, priceInBtc: number) =>
+  roundUp(usdt / priceInBtc);
+
+const updateUsdtAmount = (btc: number, price: number = BTC_PRICE as number) =>
+  (usdtAmount.value = convertBtcToUsdt(btc, price));
+
+const updateBtcAmount = (usdt: number, price: number = BTC_PRICE as number) =>
+  (btcAmount.value = convertUsdtToBtc(usdt, price));
 
 const inputOnChange = (number: number) => console.log("number :: ", number);
 
 const submitOrderOnClick = () => console.log("submit");
 const btcAmount = ref(0.05);
-const usdtAmount = ref(0.05);
+const usdtAmount = ref(0);
 const price = ref(BTC_PRICE);
 const selectedUnit = ref(options[0]);
 </script>
@@ -163,3 +216,5 @@ const selectedUnit = ref(options[0]);
   font-weight: 700;
 }
 </style>
+
+function roundUp(arg0: number) { throw new Error("Function not implemented."); }
