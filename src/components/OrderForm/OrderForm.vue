@@ -109,7 +109,7 @@ const handleBtcOnChange = (operation: Operation) => {
     (value * CALCULATION_RESOLUTION) / CALCULATION_RESOLUTION
   );
   btcAmount.value = calcValue;
-  updateUsdtAmount(calcValue, BTC_PRICE as number);
+  updateUsdtAmount(calcValue);
 };
 
 const handleUsdtOnChange = (operation: Operation) => {
@@ -123,7 +123,7 @@ const handleUsdtOnChange = (operation: Operation) => {
     (value * CALCULATION_RESOLUTION) / CALCULATION_RESOLUTION
   );
   usdtAmount.value = calcValue;
-  updateBtcAmount(calcValue, BTC_PRICE as number);
+  updateBtcAmount(calcValue);
 };
 
 const unitOnIncrease = () => {
