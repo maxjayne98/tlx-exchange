@@ -19,7 +19,7 @@ export interface ITButtonProps extends ButtonHTMLAttributes {
   label?: string;
   variant: IButtonVariants;
   rounded: boolean;
-  className: string;
+  className?: string;
 }
 const props = withDefaults(defineProps<ITButtonProps>(), {
   variant: "primary",
