@@ -3,18 +3,16 @@
     <OrderForm />
   </header>
 
-  <main>
-    <TheWelcome />
-  </main>
+  <main></main>
 </template>
 
 <script setup lang="ts">
 import OrderForm from "@/components/OrderForm/OrderForm.vue";
-import TheWelcome from "./components/TheWelcome.vue";
 </script>
 
 <style>
-@import "./assets/styles/base.css";
+@import "@/assets/styles/base.css";
+@import "@/assets/styles/normalizer.css";
 
 #app {
   max-width: 1280px;
