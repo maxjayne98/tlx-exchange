@@ -33,6 +33,18 @@
       </OrderFormInput>
     </div>
     <div class="order-form__row">
+      <div v-if="selectedUnit.value === 'BTC'" class="order-form__final-result">
+        =
+        {{ usdtAmount }}
+        <span class="order-form_final-symbol"> $ </span>
+      </div>
+      <div v-else class="order-form__final-result">
+        =
+        {{ btcAmount }}
+        <span class="order-form_final-symbol"> BTC </span>
+      </div>
+    </div>
+    <div class="order-form__row">
       <OrderFormInput
         label="Price:"
         v-model:value="price"
@@ -108,16 +120,28 @@ const selectedUnit = ref(options[0]);
   background-color: var(--color-background-secondary);
   padding: 1rem;
 }
-
+.order-form__row {
+  margin: 0.75rem 0rem;
+}
+.order-form__final-result {
+  border: 0.125rem solid var(--color-primary);
+  border-radius: 0.25rem;
+  padding: 0.125rem;
+  color: var(--color-text);
+  font-size: 1.3rem;
+  padding: 0.5rem 0.75rem;
+}
+.order-form_final-symbol {
+  color: var(--color-primary);
+  font-weight: 700;
+}
 .order-form__radio-btn {
   padding: 0;
   margin: auto;
   display: flex;
   justify-content: center;
 }
-.order-form__row {
-  margin: 0.75rem 0rem;
-}
+
 .order-form__button-container {
   display: flex;
   align-items: center;
