@@ -16,7 +16,7 @@
         :decreaseOnClick="unitOnDecrease"
         :unit="selectedUnit.label"
         label="Quantity:"
-        :inputOnChange="inputOnChange"
+        :inputOnChange="updateUsdtAmount"
       >
         <Bitcoin />
       </OrderFormInput>
@@ -27,7 +27,7 @@
         :increaseOnClick="unitOnIncrease"
         :decreaseOnClick="unitOnDecrease"
         label="Quantity:"
-        :inputOnChange="inputOnChange"
+        :inputOnChange="updateBtcAmount"
       >
         <Coin />
       </OrderFormInput>
