@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 
 interface IPriceStates {
-  price: undefined | number;
+  price: number;
 }
 
 export const usePriceStore = defineStore({
   id: "price",
   state: (): IPriceStates => ({
-    price: undefined,
+    price: 0,
   }),
   getters: {
     getPrice: (state) => state.price,
@@ -15,8 +15,6 @@ export const usePriceStore = defineStore({
 
   actions: {
     setPrice(value: number) {
-      console.log("🚀 ~ file: price.ts ~ line 18 ~ setPrice ~ value", value);
-
       this.price = value;
     },
   },

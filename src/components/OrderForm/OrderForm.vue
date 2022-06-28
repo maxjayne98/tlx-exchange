@@ -90,13 +90,15 @@ import { ref, watch } from "vue";
 import { roundUp } from "@/utils/helpers";
 import { usePriceStore } from "@/stores/price";
 import { storeToRefs } from "pinia";
+import { submitOrder } from "@/services";
+import { useToast } from "vue-toastification";
 import {
   BTC_EPSILON,
   CALCULATION_RESOLUTION,
   PRICE_EPSILON,
   USDT_EPSILON,
 } from "@/utils/configs";
-
+const toast = useToast();
 const options: IRadioButtonItem[] = [
   { label: "BTC", value: "BTC" },
   { label: "USDT", value: "USDT" },
@@ -178,7 +180,18 @@ const updateBtcAmount = (
 
 const inputOnChange = (number: number) => console.log("number :: ", number);
 
-const submitOrderOnClick = () => console.log("submit");
+const submitOrderOnClick = async (event: Event) => {
+  try {
+    const { data } = await submitOrder({
+      side: event?.target?.name as Side,
+      amount: btcAmount.value,
+      price: price.value,
+    });
+    toast.success(`order ${data.result}!`);
+  } catch (error) {
+    toast.error("Problem :P");
+  }
+};
 
 const store = usePriceStore();
 const { price: storePrice } = storeToRefs(store);
@@ -189,10 +202,6 @@ const selectedUnit = ref(options[0]);
 const updateStoreOnClick = () => store.setPrice(2000);
 
 watch(storePrice, (sp) => {
-  console.log(
-    "🚀 ~ file: OrderForm.vue ~ line 192 ~ watch ~ storePrice",
-    storePrice
-  );
   price.value = Number(sp);
   updateUsdtAmount(btcAmount.value, sp as number);
   updateBtcAmount(usdtAmount.value, sp as number);
