@@ -75,7 +75,6 @@
 </template>
 
 <script setup lang="ts">
-const BTC_PRICE = 10_000;
 import TRadioButton from "@/components/Shared/TRadioButton";
 import TButton from "@/components/Shared/TButton";
 import OrderFormInput from "@/components/OrderForm/OrderFormInput";
@@ -85,6 +84,7 @@ import Coin from "@/components/icons/Coin.vue";
 
 import type { IRadioButtonItem } from "@/models";
 import { ref } from "vue";
+import { PRICE_EPSILON } from "@/utils/configs";
 
 const options: IRadioButtonItem[] = [
   { label: "BTC", value: "BTC" },
@@ -108,11 +108,11 @@ const unitOnDecrease = () => {
 };
 
 const priceOnIncrease = () => {
-  price.value = price.value + 15;
+  price.value = price.value + PRICE_EPSILON;
 };
 
 const priceOnDecrease = () => {
-  price.value = price.value - 15;
+  price.value = price.value - PRICE_EPSILON;
 };
 
 const inputOnChange = (number: number) => console.log("number :: ", number);
