@@ -234,8 +234,13 @@ watch(storePrice, (sp) => {
 .order-form__button {
   flex: 1;
   width: 100%;
-  margin: 0 0.25rem;
   font-weight: 700;
+}
+.order-form__button:last-child {
+  margin-left: 0.25rem;
+}
+.order-form__button:first-child {
+  margin-right: 0.25rem;
 }
 </style>
 
