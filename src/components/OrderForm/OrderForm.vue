@@ -48,8 +48,8 @@
       <OrderFormInput
         label="Price:"
         v-model:value="price"
-        :increaseOnClick="unitOnIncrease"
-        :decreaseOnClick="unitOnIncrease"
+        :increaseOnClick="priceOnIncrease"
+        :decreaseOnClick="priceOnDecrease"
         class="order-form__final-price"
       >
         <Dollar />
@@ -75,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+const BTC_PRICE = 10_000;
 import TRadioButton from "@/components/Shared/TRadioButton";
 import TButton from "@/components/Shared/TButton";
 import OrderFormInput from "@/components/OrderForm/OrderFormInput";
@@ -106,12 +107,20 @@ const unitOnDecrease = () => {
   }
 };
 
+const priceOnIncrease = () => {
+  price.value = price.value + 15;
+};
+
+const priceOnDecrease = () => {
+  price.value = price.value - 15;
+};
+
 const inputOnChange = (number: number) => console.log("number :: ", number);
 
 const submitOrderOnClick = () => console.log("submit");
 const btcAmount = ref(0.05);
 const usdtAmount = ref(0.05);
-const price = ref(0);
+const price = ref(BTC_PRICE);
 const selectedUnit = ref(options[0]);
 </script>
 
