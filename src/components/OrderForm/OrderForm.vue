@@ -71,6 +71,9 @@
         >Sell</TButton
       >
     </div>
+    <div class="order-form__row">
+      <TButton @click="updateStoreOnClick">update</TButton>
+    </div>
   </div>
 </template>
 
@@ -83,11 +86,12 @@ import Dollar from "@/components/icons/Dollar.vue";
 import Coin from "@/components/icons/Coin.vue";
 
 import type { IRadioButtonItem, Operation } from "@/models";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { roundUp } from "@/utils/helpers";
+import { usePriceStore } from "@/stores/price";
+import { storeToRefs } from "pinia";
 import {
   BTC_EPSILON,
-  BTC_PRICE,
   CALCULATION_RESOLUTION,
   PRICE_EPSILON,
   USDT_EPSILON,
@@ -162,19 +166,37 @@ const convertBtcToUsdt = (btc: number, priceInUsdt: number) =>
 const convertUsdtToBtc = (usdt: number, priceInBtc: number) =>
   roundUp(usdt / priceInBtc);
 
-const updateUsdtAmount = (btc: number, price: number = BTC_PRICE as number) =>
-  (usdtAmount.value = convertBtcToUsdt(btc, price));
+const updateUsdtAmount = (
+  btc: number,
+  price: number = storePrice.value as number
+) => (usdtAmount.value = convertBtcToUsdt(btc, price));
 
-const updateBtcAmount = (usdt: number, price: number = BTC_PRICE as number) =>
-  (btcAmount.value = convertUsdtToBtc(usdt, price));
+const updateBtcAmount = (
+  usdt: number,
+  price: number = storePrice.value as number
+) => (btcAmount.value = convertUsdtToBtc(usdt, price));
 
 const inputOnChange = (number: number) => console.log("number :: ", number);
 
 const submitOrderOnClick = () => console.log("submit");
+
+const store = usePriceStore();
+const { price: storePrice } = storeToRefs(store);
 const btcAmount = ref(0.05);
 const usdtAmount = ref(0);
-const price = ref(BTC_PRICE);
+const price = ref(0);
 const selectedUnit = ref(options[0]);
+const updateStoreOnClick = () => store.setPrice(2000);
+
+watch(storePrice, (sp) => {
+  console.log(
+    "🚀 ~ file: OrderForm.vue ~ line 192 ~ watch ~ storePrice",
+    storePrice
+  );
+  price.value = Number(sp);
+  updateUsdtAmount(btcAmount.value, sp as number);
+  updateBtcAmount(usdtAmount.value, sp as number);
+});
 </script>
 
 <style scoped>
