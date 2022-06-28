@@ -322,8 +322,8 @@ menu {
   padding: 0;
 }
 
-ul{
-  padding-inline-start 
+ul {
+  padding-inline-start: 0;
 }
 /*
 Prevent resizing textareas horizontally by default.
