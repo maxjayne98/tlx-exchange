@@ -33,10 +33,10 @@
                     {{ key }} $
                   </td>
                   <td class="order-book__data-row">
-                    {{ order.amount }}
+                    {{ order.amount.toFixed(4) }}
                   </td>
                   <td class="order-book__data-row">
-                    {{ order.amount }}
+                    {{ order.amount.toFixed(4) }}
                   </td>
                 </tr>
               </tbody>
