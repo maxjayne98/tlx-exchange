@@ -6,7 +6,7 @@ export interface IRadioButtonItem {
 export type Operation = "+" | "-";
 
 export type Side = "buy" | "sell";
-
+export type OrderId = number;
 export type Order = {
   id: number;
   side: Side;

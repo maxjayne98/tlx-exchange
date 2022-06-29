@@ -16,7 +16,12 @@
           <div class="order-book__table-body" ref="tableContainerRef">
             <table class="order-book__data-table">
               <tbody>
-                <tr v-for="(index, order) in orders" :key="index">
+                <tr
+                  v-for="[key, order] in Object.entries(
+                    dataStore[side].records
+                  )"
+                  :key="key"
+                >
                   <td
                     :class="[
                       'order-book__data-row',
@@ -24,13 +29,13 @@
                       `order-book__price-data--${side}`,
                     ]"
                   >
-                    {{ order }}
+                    {{ order.price }}
                   </td>
                   <td class="order-book__data-row">
-                    {{ order }}
+                    {{ order.amount }}
                   </td>
                   <td class="order-book__data-row">
-                    {{ order }}
+                    {{ order.amount }}
                   </td>
                 </tr>
               </tbody>
@@ -47,11 +52,14 @@
 
 <script setup lang="ts">
 import { Side } from "@/models";
+import { useWebSocket } from "@/hooks/useWebSocket";
+import { onUpdated } from "vue-demi";
 
 const sides: Side[] = ["sell", "buy"];
 
-const orders = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const { dataStore } = useWebSocket();
 const mid = 1.2;
+onUpdated(() => console.log(dataStore));
 </script>
 
 <style lang="scss" scoped>
