@@ -10,6 +10,8 @@
   --color-black: #000;
 
   --section-gap: 160px;
+
+  --z-index-1000: 1000;
 }
 
 /* semantic color variables for this project */

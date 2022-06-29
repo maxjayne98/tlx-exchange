@@ -3,6 +3,8 @@ export interface IRadioButtonItem {
   value: any;
 }
 
+export interface IDropDownItem extends IRadioButtonItem {}
+
 export type Operation = "+" | "-";
 
 export type Side = "buy" | "sell";

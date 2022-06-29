@@ -1,5 +1,12 @@
 <template>
   <div class="container">
+    <div class="order-book__options">
+      <TDropDown
+        label="Group Size"
+        :items="groupSizeItems"
+        v-model:value="selectedGroupSize"
+      />
+    </div>
     <template v-for="(side, index) in sides" :key="side">
       <div class="order-book__item-container rounded">
         <div class="order-book__item-side-container rounded">
@@ -52,12 +59,22 @@
 </template>
 
 <script setup lang="ts">
-import { Side } from "@/models";
+import { Side, IDropDownItem } from "@/models";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { usePriceStore } from "@/stores/price";
+import TDropDown from "@/components/Shared/TDropDown";
+import { ref, watch } from "vue";
 
 const sides: Side[] = ["sell", "buy"];
+const groupSizeItems: IDropDownItem[] = [
+  { value: 1, label: "1" },
+  { value: 2, label: "2" },
+  { value: 5, label: "5" },
+  { value: 10, label: "10" },
+];
 
+const selectedGroupSize = ref<IDropDownItem>(groupSizeItems[3]);
+watch(selectedGroupSize, (value) => console.log(value));
 const { dataStore } = useWebSocket();
 const mid = 1.2;
 const { setPrice } = usePriceStore();
@@ -69,6 +86,9 @@ const tableRowOnClick = (value: number) => setPrice(value);
   width: 100%;
   background-color: var(--color-background-secondary);
   padding: 0.5rem;
+}
+.order-book__options {
+  margin-bottom: 0.75rem;
 }
 .order-book__item-side-container {
   overflow: hidden;
