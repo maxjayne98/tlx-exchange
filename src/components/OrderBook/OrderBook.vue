@@ -18,7 +18,7 @@
               <tbody>
                 <tr
                   v-for="[key, order] in Object.entries(
-                    dataStore[side].records
+                    dataStore[side].aggregated
                   )"
                   :key="key"
                 >
@@ -29,7 +29,7 @@
                       `order-book__price-data--${side}`,
                     ]"
                   >
-                    {{ order.price }}
+                    {{ key }} $
                   </td>
                   <td class="order-book__data-row">
                     {{ order.amount }}

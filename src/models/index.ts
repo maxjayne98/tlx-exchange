@@ -13,3 +13,7 @@ export type Order = {
   amount: number;
   price: number;
 };
+export type Agg = {
+  amount: number;
+  count: number;
+};
