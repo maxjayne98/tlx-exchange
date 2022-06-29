@@ -24,7 +24,7 @@
             <table class="order-book__data-table">
               <tbody>
                 <tr
-                  v-for="[key, order] in Object.entries(
+                  v-for="([key, order], index) in Object.entries(
                     dataStore[side].aggregated
                   )"
                   :key="key"
@@ -37,12 +37,21 @@
                       `order-book__price-data--${side}`,
                     ]"
                   >
-                    {{ key }} $
+                    <span :data-test="`order-book-price-${side}-${index}`">
+                      {{ key }}
+                    </span>
+                    $
                   </td>
-                  <td class="order-book__data-row">
+                  <td
+                    class="order-book__data-row"
+                    :data-test="`order-book-amount-${side}-${index}`"
+                  >
                     {{ order.amount.toFixed(4) }}
                   </td>
-                  <td class="order-book__data-row">
+                  <td
+                    class="order-book__data-row"
+                    :data-test="`order-book-acc-amount-${side}-${index}`"
+                  >
                     {{ order.cumAmount.toFixed(4) }}
                   </td>
                 </tr>
