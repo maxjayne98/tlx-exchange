@@ -51,7 +51,11 @@
           </div>
         </div>
       </div>
-      <div v-if="!index" class="order-book__mid-price rounded">
+      <div
+        v-if="!index"
+        class="order-book__mid-price rounded"
+        @click="() => tableRowOnClick(Number(dataStore.midPrice))"
+      >
         MID :{{ dataStore.midPrice }} $
       </div>
     </template>
@@ -76,7 +80,7 @@ const groupSizeItems: IDropDownItem[] = [
 const selectedGroupSize = ref<IDropDownItem>(groupSizeItems[2]);
 watch(selectedGroupSize, (value) => (groupSize.value = value.value));
 const { dataStore, groupSize } = useWebSocket();
-const mid = 1.2;
+
 const { setPrice } = usePriceStore();
 const tableRowOnClick = (value: number) => setPrice(value);
 </script>
@@ -138,6 +142,7 @@ const tableRowOnClick = (value: number) => setPrice(value);
   margin: 1rem 0rem;
   text-align: center;
   padding: 0.5rem;
+  cursor: pointer;
 }
 @media (max-width: 1024px) {
   .order-book__mid-price {
