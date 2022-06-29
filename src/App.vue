@@ -3,11 +3,14 @@
     <OrderForm />
   </header>
 
-  <main></main>
+  <main>
+    <OrderBook />
+  </main>
 </template>
 
 <script setup lang="ts">
-import OrderForm from "@/components/OrderForm/OrderForm.vue";
+import OrderForm from "@/components/OrderForm";
+import OrderBook from "@/components/OrderBook";
 </script>
 
 <style>
