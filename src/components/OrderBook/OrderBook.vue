@@ -21,6 +21,7 @@
                     dataStore[side].aggregated
                   )"
                   :key="key"
+                  @click="() => tableRowOnClick(key)"
                 >
                   <td
                     :class="[
@@ -53,13 +54,14 @@
 <script setup lang="ts">
 import { Side } from "@/models";
 import { useWebSocket } from "@/hooks/useWebSocket";
-import { onUpdated } from "vue-demi";
+import { usePriceStore } from "@/stores/price";
 
 const sides: Side[] = ["sell", "buy"];
 
 const { dataStore } = useWebSocket();
 const mid = 1.2;
-onUpdated(() => console.log(dataStore));
+const { setPrice } = usePriceStore();
+const tableRowOnClick = (value: number) => setPrice(value);
 </script>
 
 <style lang="scss" scoped>

@@ -71,9 +71,6 @@
         >Sell</TButton
       >
     </div>
-    <div class="order-form__row">
-      <TButton @click="updateStoreOnClick">update</TButton>
-    </div>
   </div>
 </template>
 
@@ -178,8 +175,6 @@ const updateBtcAmount = (
   price: number = storePrice.value as number
 ) => (btcAmount.value = convertUsdtToBtc(usdt, price));
 
-const inputOnChange = (number: number) => console.log("number :: ", number);
-
 const submitOrderOnClick = async (event: Event) => {
   try {
     const { data } = await submitOrder({
@@ -199,7 +194,6 @@ const btcAmount = ref(0.05);
 const usdtAmount = ref(0);
 const price = ref(0);
 const selectedUnit = ref(options[0]);
-const updateStoreOnClick = () => store.setPrice(2000);
 
 watch(storePrice, (sp) => {
   price.value = Number(sp);
