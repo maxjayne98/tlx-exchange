@@ -36,7 +36,7 @@
                     {{ order.amount.toFixed(4) }}
                   </td>
                   <td class="order-book__data-row">
-                    {{ order.amount.toFixed(4) }}
+                    {{ order.cumAmount.toFixed(4) }}
                   </td>
                 </tr>
               </tbody>
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div v-if="!index" class="order-book__mid-price rounded">
-        MID :{{ mid }}
+        MID :{{ dataStore.midPrice }} $
       </div>
     </template>
   </div>
@@ -118,5 +118,10 @@ const tableRowOnClick = (value: number) => setPrice(value);
   margin: 1rem 0rem;
   text-align: center;
   padding: 0.5rem;
+}
+@media (max-width: 1024px) {
+  .order-book__mid-price {
+    border-bottom: 1px solid var(--color-primary);
+  }
 }
 </style>

@@ -7,7 +7,9 @@ const connection = new WebSocket("ws://localhost:8080");
 type Records = Record<OrderId, Order>;
 
 interface IDataStore
-  extends Record<Side, { records: Records; aggregated: Aggregated }> {}
+  extends Record<Side, { records: Records; aggregated: Aggregated }> {
+  midPrice: number | undefined;
+}
 //  record of price and aggregated amount
 type Aggregated = Record<number, Agg>;
 
@@ -21,6 +23,7 @@ export function useWebSocket() {
       records: {},
       aggregated: {},
     },
+    midPrice: undefined,
   });
 
   const generateAggregatedInitialOrder = (
@@ -31,6 +34,7 @@ export function useWebSocket() {
     dataStore.value[side].aggregated[roundedPrice] = {
       amount: amount,
       count: 1,
+      cumAmount: 0,
     };
   };
 
@@ -60,6 +64,41 @@ export function useWebSocket() {
 
   const getRoundedPrice = (price: number) => roundTo(price, 5);
 
+  const calcCumulativeAmountBuySide = () => {
+    let sum = 0;
+    Object.entries(dataStore.value.buy.aggregated)
+      .reverse()
+      .forEach(([_key, value]: [number, Agg]) => {
+        sum += value.amount;
+        value.cumAmount = sum;
+      });
+  };
+
+  const calcCumulativeAmountSellSide = () => {
+    let sum = 0;
+    Object.entries(dataStore.value.sell.aggregated).forEach(
+      ([_key, value]: [number, Agg]) => {
+        sum += value.amount;
+        value.cumAmount = sum;
+      }
+    );
+  };
+
+  const regenerateAggregated = () => {
+    dataStore.value.buy.aggregated = {};
+    dataStore.value.sell.aggregated = {};
+    const update = (order: Order) => {
+      const roundedPrice = getRoundedPrice(order.price);
+      if (!(roundedPrice in dataStore.value[order.side].aggregated)) {
+        generateAggregatedInitialOrder(order, roundedPrice, order.side);
+      } else {
+        updateAggregated(order, roundedPrice, order.side, "+");
+      }
+    };
+    Object.values(dataStore.value.buy.records).forEach(update);
+    Object.values(dataStore.value.sell.records).forEach(update);
+  };
+
   const addNewOrder = (order: Order) => {
     const { side, price } = order;
     const roundedPrice = getRoundedPrice(price);
@@ -84,6 +123,10 @@ export function useWebSocket() {
     }
   };
 
+  const updateMidPrice = () => {
+    dataStore.value.midPrice = getMidPrice();
+  };
+
   onMounted(() => {
     connection.onopen = function () {
       console.log("connected");
@@ -105,9 +148,19 @@ export function useWebSocket() {
           data.insert.forEach((order: Order) => addNewOrder(order));
         }
       }
+      calcCumulativeAmountBuySide();
+      calcCumulativeAmountSellSide();
+      updateMidPrice();
     };
   });
 
+  const getMidPrice = () => {
+    return (
+      (Number(Object.keys(dataStore.value.sell.aggregated).at(-1)) +
+        Number(Object.keys(dataStore.value.sell.aggregated)[0])) /
+      2
+    );
+  };
   return {
     dataStore,
   };

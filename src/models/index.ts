@@ -16,4 +16,5 @@ export type Order = {
 export type Agg = {
   amount: number;
   count: number;
+  cumAmount: number;
 };
