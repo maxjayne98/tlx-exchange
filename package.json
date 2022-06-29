@@ -14,7 +14,6 @@
     "test:unit:ci": "cypress run --component --quiet --reporter spec"
   },
   "dependencies": {
-    "pinia": "^2.0.14",
     "vue": "^3.2.37",
     "vue-toastification": "^2.0.0-rc.5"
   },

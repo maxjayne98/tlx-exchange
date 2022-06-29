@@ -1,16 +1,18 @@
 <template>
   <header>
-    <OrderForm />
+    <OrderForm v-model:price="price" />
   </header>
 
   <main>
-    <OrderBook />
+    <OrderBook v-model:price="price" />
   </main>
 </template>
 
 <script setup lang="ts">
 import OrderForm from "@/components/OrderForm";
 import OrderBook from "@/components/OrderBook";
+import { ref } from "vue";
+const price = ref(0);
 </script>
 
 <style>

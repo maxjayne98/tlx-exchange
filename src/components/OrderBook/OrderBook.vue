@@ -65,7 +65,6 @@
 <script setup lang="ts">
 import { Side, IDropDownItem } from "@/models";
 import { useWebSocket } from "@/hooks/useWebSocket";
-import { usePriceStore } from "@/stores/price";
 import TDropDown from "@/components/Shared/TDropDown";
 import { ref, watch } from "vue";
 
@@ -81,8 +80,17 @@ const selectedGroupSize = ref<IDropDownItem>(groupSizeItems[2]);
 watch(selectedGroupSize, (value) => (groupSize.value = value.value));
 const { dataStore, groupSize } = useWebSocket();
 
-const { setPrice } = usePriceStore();
+const props = defineProps<{ price: number }>();
+const emit = defineEmits(["update:price"]);
+const setPrice = (value: number) => emit("update:price", value);
 const tableRowOnClick = (value: number) => setPrice(value);
+
+watch(
+  () => dataStore.value.midPrice,
+  (currentValue, oldValue) => {
+    !oldValue && setPrice(currentValue as number);
+  }
+);
 </script>
 
 <style lang="scss" scoped>

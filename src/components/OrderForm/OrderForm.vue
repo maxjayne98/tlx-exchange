@@ -85,8 +85,6 @@ import Coin from "@/components/icons/Coin.vue";
 import type { IRadioButtonItem, Operation } from "@/models";
 import { ref, watch } from "vue";
 import { roundUp } from "@/utils/helpers";
-import { usePriceStore } from "@/stores/price";
-import { storeToRefs } from "pinia";
 import { submitOrder } from "@/services";
 import { useToast } from "vue-toastification";
 import {
@@ -165,15 +163,11 @@ const convertBtcToUsdt = (btc: number, priceInUsdt: number) =>
 const convertUsdtToBtc = (usdt: number, priceInBtc: number) =>
   roundUp(usdt / priceInBtc);
 
-const updateUsdtAmount = (
-  btc: number,
-  price: number = storePrice.value as number
-) => (usdtAmount.value = convertBtcToUsdt(btc, price));
+const updateUsdtAmount = (btc: number, price: number = props.price as number) =>
+  (usdtAmount.value = convertBtcToUsdt(btc, price));
 
-const updateBtcAmount = (
-  usdt: number,
-  price: number = storePrice.value as number
-) => (btcAmount.value = convertUsdtToBtc(usdt, price));
+const updateBtcAmount = (usdt: number, price: number = props.price as number) =>
+  (btcAmount.value = convertUsdtToBtc(usdt, price));
 
 const submitOrderOnClick = async (event: Event) => {
   try {
@@ -188,18 +182,21 @@ const submitOrderOnClick = async (event: Event) => {
   }
 };
 
-const store = usePriceStore();
-const { price: storePrice } = storeToRefs(store);
+const props = defineProps<{ price: number }>();
+
 const btcAmount = ref(0.05);
 const usdtAmount = ref(0);
 const price = ref(0);
 const selectedUnit = ref(options[0]);
 
-watch(storePrice, (sp) => {
-  price.value = Number(sp);
-  updateUsdtAmount(btcAmount.value, sp as number);
-  updateBtcAmount(usdtAmount.value, sp as number);
-});
+watch(
+  () => props.price,
+  (sp) => {
+    price.value = sp;
+    updateUsdtAmount(btcAmount.value, sp as number);
+    updateBtcAmount(usdtAmount.value, sp as number);
+  }
+);
 </script>
 
 <style scoped>
