@@ -56,7 +56,11 @@
         class="order-book__mid-price rounded"
         @click="() => tableRowOnClick(Number(dataStore.midPrice))"
       >
-        MID :{{ dataStore.midPrice }} $
+        MID :
+        <span class="order-book__mid-price-value">
+          {{ dataStore.midPrice }}
+        </span>
+        $
       </div>
     </template>
   </div>

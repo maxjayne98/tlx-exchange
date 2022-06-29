@@ -35,12 +35,16 @@
     <div class="order-form__row">
       <div v-if="selectedUnit.value === 'BTC'" class="order-form__final-result">
         =
-        {{ usdtAmount }}
+        <span class="order-form__final-result-value">
+          {{ usdtAmount }}
+        </span>
         <span class="order-form_final-symbol"> $ </span>
       </div>
       <div v-else class="order-form__final-result">
         =
-        {{ btcAmount }}
+        <span class="order-form__final-result-value">
+          {{ btcAmount }}
+        </span>
         <span class="order-form_final-symbol"> BTC </span>
       </div>
     </div>
