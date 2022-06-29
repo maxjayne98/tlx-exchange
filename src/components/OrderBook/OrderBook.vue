@@ -73,9 +73,9 @@ const groupSizeItems: IDropDownItem[] = [
   { value: 10, label: "10" },
 ];
 
-const selectedGroupSize = ref<IDropDownItem>(groupSizeItems[3]);
-watch(selectedGroupSize, (value) => console.log(value));
-const { dataStore } = useWebSocket();
+const selectedGroupSize = ref<IDropDownItem>(groupSizeItems[2]);
+watch(selectedGroupSize, (value) => (groupSize.value = value.value));
+const { dataStore, groupSize } = useWebSocket();
 const mid = 1.2;
 const { setPrice } = usePriceStore();
 const tableRowOnClick = (value: number) => setPrice(value);
@@ -98,7 +98,7 @@ const tableRowOnClick = (value: number) => setPrice(value);
 }
 .order-book__table-body {
   /* min-height: 15rem; */
-  max-height: 15rem;
+  max-height: 10rem;
   overflow-y: scroll;
 }
 .order-book__header-table {

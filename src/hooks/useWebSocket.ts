@@ -25,6 +25,7 @@ export function useWebSocket() {
     },
     midPrice: undefined,
   });
+  const groupSize = ref(5);
 
   const generateAggregatedInitialOrder = (
     { amount }: Order,
@@ -62,7 +63,7 @@ export function useWebSocket() {
     }
   };
 
-  const getRoundedPrice = (price: number) => roundTo(price, 5);
+  const getRoundedPrice = (price: number) => roundTo(price, groupSize.value);
 
   const calcCumulativeAmountBuySide = () => {
     let sum = 0;
@@ -161,7 +162,9 @@ export function useWebSocket() {
       2
     );
   };
+  watch(groupSize, regenerateAggregated);
   return {
     dataStore,
+    groupSize,
   };
 }
