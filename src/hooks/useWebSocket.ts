@@ -49,7 +49,7 @@ export function useWebSocket() {
     delete dataStore.value[side].aggregated[roundedPrice];
 
   const updateAggregated = (
-    { amount }: Order,
+    { amount, id }: Order,
     roundedPrice: number,
     side: Side,
     operation: Operation
@@ -58,8 +58,12 @@ export function useWebSocket() {
       dataStore.value[side].aggregated[roundedPrice].amount += amount;
       dataStore.value[side].aggregated[roundedPrice].count += 1;
     } else {
-      dataStore.value[side].aggregated[roundedPrice].amount -= amount;
-      dataStore.value[side].aggregated[roundedPrice].count -= 1;
+      const updatedAmount =
+        dataStore.value[side].aggregated[roundedPrice].amount - amount;
+      if (updatedAmount > 0) {
+        dataStore.value[side].aggregated[roundedPrice].amount -= amount;
+        dataStore.value[side].aggregated[roundedPrice].count -= 1;
+      }
     }
   };
 
