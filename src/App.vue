@@ -1,11 +1,11 @@
 <template>
-  <header>
+  <div class="app__order-book">
     <OrderForm v-model:price="price" />
-  </header>
+  </div>
 
-  <main>
+  <div>
     <OrderBook v-model:price="price" />
-  </main>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -27,28 +27,6 @@ const price = ref(0);
   font-weight: normal;
 }
 
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: var(--color-primary);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
 @media (min-width: 1024px) {
   body {
     display: flex;
@@ -61,20 +39,10 @@ a,
     padding: 0 2rem;
   }
 
-  header {
+  .app__order-book {
     display: flex;
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
   }
 }
 </style>
