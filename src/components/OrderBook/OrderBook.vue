@@ -20,12 +20,16 @@
             </thead>
           </table>
 
-          <div class="order-book__table-body" ref="tableContainerRef">
+          <div
+            class="order-book__table-body"
+            :ref="(el) => assignContainerRef(el, side)"
+          >
             <table class="order-book__data-table">
               <tbody>
                 <tr
-                  v-for="([key, order], index) in Object.entries(
-                    dataStore[side].aggregated
+                  v-for="([key, order], index) in getAggregatedOrders(
+                    Object.entries(dataStore[side].aggregated),
+                    side
                   )"
                   :key="key"
                   @click="() => tableRowOnClick(key)"
@@ -76,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { Side, IDropDownItem } from "@/models";
+import { Side, IDropDownItem, type Agg } from "@/models";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import TDropDown from "@/components/Shared/TDropDown";
 import { ref, watch } from "vue";
@@ -92,16 +96,38 @@ const groupSizeItems: IDropDownItem[] = [
 const selectedGroupSize = ref<IDropDownItem>(groupSizeItems[2]);
 watch(selectedGroupSize, (value) => (groupSize.value = value.value));
 const { dataStore, groupSize } = useWebSocket();
+const tableContainerRefs = {
+  sell: ref<HTMLDivElement>(),
+  buy: ref<HTMLDivElement>(),
+};
+const sellTableContainer = ref<HTMLDivElement>();
+const buyTableContainer = ref<HTMLDivElement>();
 
+const assignContainerRef = (el, side: Side) => {
+  if (side === "buy") buyTableContainer.value = el;
+  if (side === "sell") sellTableContainer.value = el;
+};
 const props = defineProps<{ price: number }>();
 const emit = defineEmits(["update:price"]);
 const setPrice = (value: number) => emit("update:price", value);
 const tableRowOnClick = (value: number) => setPrice(value);
+const getAggregatedOrders = (items: Agg[], side: Side) =>
+  side === "sell" ? items.reverse() : items;
 
 watch(
   () => dataStore.value.midPrice,
   (currentValue, oldValue) => {
     !oldValue && setPrice(currentValue as number);
+  }
+);
+
+watch(
+  () => groupSize.value,
+  () => {
+    buyTableContainer.value?.scrollTo({ top: 0 });
+    sellTableContainer.value?.scrollTo({
+      top: buyTableContainer.value?.scrollHeight,
+    });
   }
 );
 </script>
